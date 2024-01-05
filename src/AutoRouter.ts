@@ -1,18 +1,23 @@
 import express from "express";
 import {glob} from "glob";
+import * as path from "path";
 
 export class AutoRouter {
+    private readonly dirname: string;
     private readonly ext: string;
-    private readonly cwd: string;
+    private readonly twd: string;
     private readonly out: string;
+    private readonly logCreation: boolean;
     private readonly router: express.Router;
     private readonly paths: [string, express.Router][];
     private loaded: boolean;
 
-    constructor(cwd: string, ext: string, out: string) {
+    constructor(dirname: string, twd: string, ext: string, out: string, logCreation: boolean = false) {
+        this.dirname = dirname;
         this.ext = ext;
-        this.cwd = cwd;
+        this.twd = twd;
         this.out = out;
+        this.logCreation = logCreation;
         this.router = express.Router();
 
         this.paths = [];
@@ -22,14 +27,16 @@ export class AutoRouter {
     private async resolve () {
         if (this.loaded) return;
 
-        let files = await glob(`**/*${this.ext}`, {cwd: this.cwd, withFileTypes: true});
+        let files = await glob(`**/*${this.ext}`, {cwd: path.join(this.dirname, this.twd), withFileTypes: true});
         let pathNames = files.map(f => [
             f.relativePosix().replace(this.ext, ""),
-            this.out + f.sep + f.relative().replace(".ts", ".js")
+            path.join(this.dirname, this.out, f.relative().replace(".ts", ".js"))
         ]);
 
         for (let i = 0; i < pathNames.length; i++) {
-            console.log(`Loading Router [${pathNames[i][0]}] from ${pathNames[i][1]}`);
+            if (this.logCreation) {
+                console.log(`Loading Router [${pathNames[i][0]}] from ${pathNames[i][1]}`);
+            }
 
             this.paths.push([
                 pathNames[i][0],
