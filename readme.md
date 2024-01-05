@@ -10,6 +10,12 @@ The package can be installed via NPM:
 $ npm install express-doc-router
 ```
 
+## Pretext
+
+The documentation-generation is based on the _OpenAPI V3 Specification_:  
+ - [OpenAPI V3.1 Specification](https://spec.openapis.org/oas/latest.html) 
+ - [OpenAPI V3.1 on Swagger](https://swagger.io/specification/)
+
 ## Usage
 
 ### Setting up endpoints
@@ -26,12 +32,12 @@ export default Router;
 
 ### Loading routes
 
-Endpoints and routes created in the above specified format can then be automatically loaded from a specific directory:
+Endpoints and routes created in the above format can then be automatically loaded from a specified directory:
 ```ts
 import express from "express";
 
 // import the router
-import {AutoRouter} from "express-auto-router";
+import {AutoRouter} from "express-doc-router";
 
 // standard express app
 const app = express();
@@ -52,12 +58,12 @@ const autoRouter = new AutoRouter(__dirname, "../src/routes", ".ts", "./routes")
 
 ### Generating documentation
 
-The information from the loaded routes can then be further used to automatically generate documentation:
+The information from the loaded routes can be used to automatically generate documentation:
 ```ts
 // ... continiung from the previous example
 
 // import the OpenAPI specification generator
-import {SpecificationGenerator} from "express-auto-router";
+import {SpecificationGenerator} from "express-doc-router";
 
 // setup the generator
 const specGenerator = new SpecificationGenerator(
@@ -92,7 +98,6 @@ const specGenerator = new SpecificationGenerator(
 // generate the specification
 const specification = specGenerator.generate();
 ```
-[OpenAPI V3.1 Specification](https://spec.openapis.org/oas/latest.html) and [OpenAPI V3.1 on Swagger](https://swagger.io/specification/)  
 
 The generated specification can either be exported or directly used by tools such as [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express):
 ```ts
@@ -109,7 +114,7 @@ The automatically generated documentation is relatively un-detailed, whilst the 
 More information about an endpoint can be added using the `meta` middleware:
 ```ts
 // import the meta-middlerware
-import {meta} from "express-auto-router";
+import {meta} from "express-doc-router";
 
 // example endpoint, as in "Setting up endpoints" above
 router.get("/:some_param", 
