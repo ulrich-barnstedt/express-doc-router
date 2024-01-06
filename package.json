@@ -1,6 +1,6 @@
 {
   "name": "express-doc-router",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Automatic loading and documenting of Express routes",
   "main": "build/index.js",
   "types": "build/index.d.ts",

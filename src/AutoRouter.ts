@@ -30,7 +30,7 @@ export class AutoRouter {
         let files = await glob(`**/*${this.ext}`, {cwd: path.join(this.dirname, this.twd), withFileTypes: true});
         let pathNames = files.map(f => [
             f.relativePosix().replace(this.ext, ""),
-            path.join(this.dirname, this.out, f.relative().replace(".ts", ".js"))
+            "file://" + path.join(this.dirname, this.out, f.relative().replace(".ts", ".js"))
         ]);
 
         for (let i = 0; i < pathNames.length; i++) {
