@@ -38,9 +38,13 @@ export class AutoRouter {
                 console.log(`Loading Router [${pathNames[i][0]}] from ${pathNames[i][1]}`);
             }
 
+            let mod = (await import(pathNames[i][1])).default;
+            if ("default" in mod) mod = mod.default;
+            mod = <express.Router> mod;
+
             this.paths.push([
                 pathNames[i][0],
-                <express.Router>(await import(pathNames[i][1])).default.default
+                mod
             ])
         }
 
